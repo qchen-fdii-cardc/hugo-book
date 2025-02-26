@@ -1,10 +1,137 @@
 <!DOCTYPE html>
-<html lang="{{ default .Site.Language.Lang .Site.LanguageCode  }}" dir="{{ default "ltr" .Site.Language.LanguageDirection }}">
+<html lang="{{ default .Site.Language.Lang .Site.LanguageCode  }}" dir="{{ default " ltr"
+  .Site.Language.LanguageDirection }}">
+
 <head>
   {{ partial "docs/html-head" . }}
   {{ partial "docs/inject/head" . }}
+
+  <!-- katex -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"
+    integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"
+    integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh" crossorigin="anonymous">
+    </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"
+    integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);">
+    </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: '\\[', right: '\\]', display: true },   // block
+          { left: '$$', right: '$$', display: true },     // block
+          { left: '\\(', right: '\\)', display: false },  // inline
+          { left: '$', right: '$', display: false },     // inline
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+
+  <!-- mermaid -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const elements = document.getElementsByClassName('language-mermaid');
+      for (let i = 0; i < elements.length; i++) {
+        const element = elements[i];
+        const code = element.textContent;
+
+        // 创建tab容器
+        const tabContainer = document.createElement('div');
+        tabContainer.className = 'mermaid-tabs';
+
+        // 创建tab按钮
+        const tabButtons = document.createElement('div');
+        tabButtons.className = 'mermaid-tab-buttons';
+
+        const diagramButton = document.createElement('button');
+        diagramButton.textContent = '图表';
+        diagramButton.className = 'mermaid-tab-button active';
+
+        const codeButton = document.createElement('button');
+        codeButton.textContent = '源码';
+        codeButton.className = 'mermaid-tab-button';
+
+        tabButtons.appendChild(diagramButton);
+        tabButtons.appendChild(codeButton);
+
+        // 创建内容面板
+        const diagramPanel = document.createElement('div');
+        diagramPanel.className = 'mermaid';
+        diagramPanel.textContent = code;
+
+        const codePanel = document.createElement('pre');
+        codePanel.className = 'mermaid-code';
+        codePanel.style.display = 'none';
+        codePanel.textContent = code;
+
+        // 组装tab容器
+        tabContainer.appendChild(tabButtons);
+        tabContainer.appendChild(diagramPanel);
+        tabContainer.appendChild(codePanel);
+
+        // 替换原始元素
+        element.parentNode.replaceChild(tabContainer, element);
+
+        // 添加切换事件
+        diagramButton.addEventListener('click', () => {
+          diagramPanel.style.display = 'block';
+          codePanel.style.display = 'none';
+          diagramButton.classList.add('active');
+          codeButton.classList.remove('active');
+        });
+
+        codeButton.addEventListener('click', () => {
+          diagramPanel.style.display = 'none';
+          codePanel.style.display = 'block';
+          diagramButton.classList.remove('active');
+          codeButton.classList.add('active');
+        });
+      }
+    });
+  </script>
+
+  <style>
+    .mermaid-tabs {
+      margin: 1em 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .mermaid-tab-buttons {
+      border-bottom: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    .mermaid-tab-button {
+      background: none;
+      border: 1px solid transparent;
+      padding: 6px 12px;
+      cursor: pointer;
+      margin-right: 4px;
+      border-radius: 4px;
+    }
+
+    .mermaid-tab-button.active {
+      border-color: #ddd;
+      background: #f8f9fa;
+    }
+
+    .mermaid-code {
+      padding: 1em;
+      margin: 0;
+      background: #f8f9fa;
+    }
+  </style>
+
 </head>
-<body dir="{{ default "ltr" .Site.Language.LanguageDirection }}">
+
+<body dir="{{ default " ltr" .Site.Language.LanguageDirection }}">
   <input type="checkbox" class="hidden toggle" id="menu-control" />
   <input type="checkbox" class="hidden toggle" id="toc-control" />
   <main class="container flex">
@@ -44,40 +171,41 @@
 
   {{ partial "docs/inject/body" . }}
 </body>
+
 </html>
 
 {{ define "menu" }}
-  {{ partial "docs/menu" . }}
+{{ partial "docs/menu" . }}
 {{ end }}
 
 {{ define "header" }}
-  {{ partial "docs/header" . }}
+{{ partial "docs/header" . }}
 
-  {{ if default true (default .Site.Params.BookToC .Params.BookToC) }}
-  <aside class="hidden clearfix">
-    {{ template "toc" . }}
-  </aside>
-  {{ end }}
+{{ if default true (default .Site.Params.BookToC .Params.BookToC) }}
+<aside class="hidden clearfix">
+  {{ template "toc" . }}
+</aside>
+{{ end }}
 {{ end }}
 
 {{ define "footer" }}
-  {{ partial "docs/footer" . }}
+{{ partial "docs/footer" . }}
 {{ end }}
 
 {{ define "comments" }}
-  {{ if and .Content (default true (default .Site.Params.BookComments .Params.BookComments)) }}
-  <div class="book-comments">
-    {{- partial "docs/comments" . -}}
-  </div>
-  {{ end }}
+{{ if and .Content (default true (default .Site.Params.BookComments .Params.BookComments)) }}
+<div class="book-comments">
+  {{- partial "docs/comments" . -}}
+</div>
+{{ end }}
 {{ end }}
 
 {{ define "main" }}
-  <article class="markdown book-article">
-    {{- .Content -}}
-  </article>
+<article class="markdown book-article">
+  {{- .Content -}}
+</article>
 {{ end }}
 
 {{ define "toc" }}
-  {{ partial "docs/toc" . }}
+{{ partial "docs/toc" . }}
 {{ end }}
