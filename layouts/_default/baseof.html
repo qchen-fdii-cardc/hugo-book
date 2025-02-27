@@ -121,6 +121,37 @@
     }
   </style>
 
+  <style>
+    img {
+      max-width: "{{ .Site.Params.maxImgSize | default 400 }}px";
+      max-height: "{{ .Site.Params.maxImgSize | default 400 }}px";
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const maxImgSize = "{{ .Site.Params.maxImgSize | default 400}}";
+      const imgs = document.querySelectorAll('img');
+      imgs.forEach(img => {
+        if (img.width > maxImgSize) img.width = maxImgSize;
+        if (img.height > maxImgSize) img.height = maxImgSize;
+
+        const title = document.createElement('div');
+        title.style.textAlign = 'center';
+        title.style.marginTop = '10px';
+        title.textContent = img.title || img.alt;
+        img.parentNode.insertBefore(title, img.nextSibling);
+      });
+    });
+  </script>
+
 </head>
 
 <body dir="{{ default " ltr" .Site.Language.LanguageDirection }}">
