@@ -137,15 +137,17 @@
     document.addEventListener('DOMContentLoaded', function () {
       const maxImgSize = "{{ .Site.Params.maxImgSize | default 400}}";
 
-      const imgs = document.querySelectorAll('img');
-      imgs.forEach(img => {
+      const imgs = document.querySelectorAll('.markdown img');
+      imgs.forEach((img, idx) => {
         if (img.width > maxImgSize) img.width = maxImgSize;
         if (img.height > maxImgSize) img.height = maxImgSize;
 
         const title = document.createElement('div');
         title.style.textAlign = 'center';
         title.style.marginTop = '10px';
-        title.textContent = img.title || img.alt;
+        title.textContent = '图  ' + (idx + 1) + '  ' + (img.title || img.alt);
+        // add anchor to the title
+        img.id = 'img-' + img.alt;
         img.parentNode.insertBefore(title, img.nextSibling);
       });
     });
