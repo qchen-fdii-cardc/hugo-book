@@ -123,8 +123,6 @@
 
   <style>
     img {
-      max-width: "{{ .Site.Params.maxImgSize | default 400 }}px";
-      max-height: "{{ .Site.Params.maxImgSize | default 400 }}px";
       display: block;
       margin-left: auto;
       margin-right: auto;
@@ -138,6 +136,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const maxImgSize = "{{ .Site.Params.maxImgSize | default 400}}";
+
       const imgs = document.querySelectorAll('img');
       imgs.forEach(img => {
         if (img.width > maxImgSize) img.width = maxImgSize;
