@@ -133,10 +133,9 @@
     }
   </style>
 
-  <script>
+  <script async="false">
     document.addEventListener('DOMContentLoaded', function () {
       const maxImgSize = "{{ .Site.Params.maxImgSize | default 400}}";
-
       const imgs = document.querySelectorAll('.markdown img');
       imgs.forEach((img, idx) => {
         if (img.width > maxImgSize) img.width = maxImgSize;
