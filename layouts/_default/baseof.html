@@ -9,10 +9,7 @@
   <!-- katex -->
   <link rel="stylesheet" href="/katex/katex.min.css">
   <script defer src="/katex/katex.min.js"> </script>
-  <script defer src="/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      renderMathInElement(document.body, {
+  <script defer src="/katex/auto-render.min.js" onload="renderMathInElement(document.body, {
         delimiters: [
           { left: '\\[', right: '\\]', display: true },   // block
           { left: '$$', right: '$$', display: true },     // block
@@ -20,9 +17,8 @@
           { left: '$', right: '$', display: false },     // inline
         ],
         throwOnError: false
-      });
-    });
-  </script>
+      });"></script>
+
 
   <!-- mermaid -->
   <script defer src="/mermaid.min.js" onload="mermaid.initialize({ startOnLoad: true });"> </script>
